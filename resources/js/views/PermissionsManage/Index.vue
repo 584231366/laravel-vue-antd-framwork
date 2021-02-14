@@ -75,7 +75,10 @@
 					data: [],
 					pagination: {
 						current: 1,
-						total: 1
+						total: 1,
+						onChange: (page) =>{
+							this.getData(page)
+						}
 					},
 					loading: false,
 				},
@@ -94,14 +97,14 @@
 			}
 		},
 		created () {
-			this.getData()
+			this.getData(1)
 		},
 		methods: {
-			async getData () {
+			async getData (page) {
 				var _this = this
 				if(!this.table.loading){
 					this.table.loading = true
-					await this.$axios.get("/api/permissions")
+					await this.$axios.get("/api/permissions?page="+page)
 					.then(function(res){
 						var list = res.data
 						for(var i in list.data){
