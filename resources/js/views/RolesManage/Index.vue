@@ -133,7 +133,7 @@
 								guard_name: values.guard_name
 							})
 							.then(function(res){
-								_this.getData()
+								_this.getData(_this.table.pagination.current)()
 								_this.$message.success(res.message,1);
 								_this.showForm = false
 							})
@@ -155,7 +155,7 @@
 								guard_name: values.guard_name
 							})
 							.then(function(res){
-								_this.getData()
+								_this.getData(_this.table.pagination.current)()
 								_this.$message.success(res.message,1);
 								_this.showForm = false
 							})
@@ -177,12 +177,19 @@
 			},
 			async deleteData(record) {
 				var _this = this
-				await this.$axios.delete("/api/roles/"+record.key)
-				.then(function(res){
-					_this.getData()
-					_this.$message.success(res.message,1);
-					_this.showForm = false
-				})
+				this.$confirm({
+					title: '确认提示',
+					content: '是否确认删除数据?',
+					async onOk() {
+						await _this.$axios.delete("/api/roles/"+record.key)
+						.then(function(res){
+							_this.getData()
+							_this.$message.success(res.message,1);
+							_this.showForm = false
+						})
+					},
+					onCancel() {}
+				});
 			},
 			editData(record){
 				var _this = this
